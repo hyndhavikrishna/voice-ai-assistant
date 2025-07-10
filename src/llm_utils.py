@@ -1,25 +1,24 @@
 import os
 from dotenv import load_dotenv
 
-# Load .env if present (puts OPENAI_API_KEY into env)
+# 1) Load .env if it exists (puts OPENAI_API_KEY into os.environ)
 load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), "..", ".env"))
 
-# Grab the key (may be None)
+# 2) Check for a key
 api_key = os.getenv("OPENAI_API_KEY")
+DEMO = not api_key  # if no key, we’re in demo mode
 
-# If there's no API key, we're in demo mode
-DEMO = not api_key
-
+# 3) Only import OpenAI when in real mode
 if not DEMO:
     from openai import OpenAI, OpenAIError
     client = OpenAI(api_key=api_key)
 
 def ask_llm(prompt: str) -> str:
     if DEMO:
-        # Simple echo when no key
+        # Demo mode: just echo back your prompt
         return f"[Demo] You said: {prompt}"
 
-    # Real API call (with a friendly catch-all)
+    # Real mode: call the API and handle errors
     try:
         resp = client.chat.completions.create(
             model="gpt-3.5-turbo",
