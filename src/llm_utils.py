@@ -1,16 +1,16 @@
-
 import os
 from dotenv import load_dotenv
-from openai import OpenAI
-from openai.error import RateLimitError
+from openai import OpenAI, OpenAIError
 
-# Load your .env explicitly
+# 1) Load your .env explicitly
 load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), "..", ".env"))
 
+# 2) Grab the key—or fail early
 api_key = os.getenv("OPENAI_API_KEY")
 if not api_key:
     raise RuntimeError("Missing OPENAI_API_KEY in environment")
 
+# 3) Instantiate the client
 client = OpenAI(api_key=api_key)
 
 def ask_llm(prompt: str) -> str:
@@ -20,7 +20,6 @@ def ask_llm(prompt: str) -> str:
             messages=[{"role": "user", "content": prompt}],
         )
         return resp.choices[0].message.content.strip()
-    except RateLimitError:
-        return "Sorry, I’m out of quota right now — please try again later."
-    except Exception as e:
-        return f"Oops—an error occurred: {e}"
+    except OpenAIError as e:
+        # handle any API error (incl. rate limits) with a friendly fallback
+        return "Sorry, I’m unable to respond right now—please try again later."
