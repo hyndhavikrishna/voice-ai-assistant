@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 import speech_recognition as sr
 from src.audio_utils import record_audio, speak
 from src.llm_utils import ask_llm
@@ -23,4 +23,3 @@ def main():
 if __name__ == "__main__":
     main()
 
->>>>>>> 76092769d83934b1c1156079e660a169658d8725
