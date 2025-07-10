@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 import os
 from openai import OpenAI
 
@@ -11,8 +11,6 @@ def ask_llm(prompt: str) -> str:
     resp = client.chat.completions.create(model="gpt-3.5-turbo",
     messages=[{"role":"user","content":prompt}])
     return resp.choices[0].message.content.strip()
-
-=======
 import os
 from dotenv import load_dotenv
 from openai import OpenAI, error as openai_error
@@ -41,6 +39,3 @@ def ask_llm(prompt: str) -> str:
         # catch any other API issues
         return f"Oops—an error occurred: {e}"
 
-
-
->>>>>>> 76092769d83934b1c1156079e660a169658d8725
